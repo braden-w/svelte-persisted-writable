@@ -2,16 +2,20 @@
 
 A drop-in extension of Svelte's `writable` that additionally stores and restores its contents using localStorage. Perfect for saving local preferences and much more. Fully type-safe.
 
+Forked from [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable), this version introduces minor API changes while maintaining full type-safety and localstorage integration.
+
+A drop-in extension of Svelte's `writable` that additionally stores and restores its contents using localStorage. Perfect for saving local preferences and much more. Fully type-safe.
+
 ## ⬇️ Installation
 
 Install with NPM or yarn. We're also installing `zod` to be able to define the writable's schema (more on this below).
 
 ```bash
-npm install @efstajas/svelte-stored-writable zod
+npm install @braden_wong_/svelte-stored-writable zod
 
 # OR
 
-yarn add @efstajas/svelte-stored-writable zod
+yarn add @braden_wong_/svelte-stored-writable zod
 ```
 
 ## 🤓 Usage
@@ -21,15 +25,18 @@ yarn add @efstajas/svelte-stored-writable zod
 To generate a new storedWritable, call it with a `key`, `schema` and `initialValue`:
 
 ```ts
-import storedWritable from '@efstajas/svelte-stored-writable';
-import { z } from 'zod';
+import storedWritable from "@braden_wong_/svelte-stored-writable";
+import { z } from "zod";
 
 const myWritableSchema = z.object({
   foo: z.string(),
   bar: z.number(),
 });
 
-const myStoredWritable = storedWritable('my-writable-key', myWritableSchema, { foo: 'hello', bar: 1234 });
+const myStoredWritable = storedWritable("my-writable-key", myWritableSchema, {
+  foo: "hello",
+  bar: 1234,
+});
 ```
 
 #### `key`
@@ -46,7 +53,7 @@ When calling `storedWritable`, it will first attempt to restore any previously-s
 
 #### Optional: `skipLocalStorage`
 
-Pass `true` as the last argument to disable all interaction with localStorage. This will cause the writable to *not* attempt to restore contents from localStorage, or write any changes. You might want to set this to `true` in an SSR context, for instance, where the server has no access to `localStorage`.
+Pass `true` as the last argument to disable all interaction with localStorage. This will cause the writable to _not_ attempt to restore contents from localStorage, or write any changes. You might want to set this to `true` in an SSR context, for instance, where the server has no access to `localStorage`.
 
 Tip: If you're using SvelteKit, you can pass `!browser` as the last argument to automatically skip localStorage interactions while rendering server-side.
 
@@ -58,11 +65,14 @@ Additionally, you can call `storedWritable.clear` to delete any saved data in lo
 ```ts
 // ...
 
-const myStoredWritable = storedWritable('my-writable-key', myWritableSchema, { foo: 'hello', bar: 1234 });
+const myStoredWritable = storedWritable("my-writable-key", myWritableSchema, {
+  foo: "hello",
+  bar: 1234,
+});
 
 const { foo, bar } = get(myStoredWritable); // foo: 'hello', bar: 1234
 
-myStoredWritable.set({ foo: 'goodbye', bar: 1234 }); // Saves new values to localStorage
+myStoredWritable.set({ foo: "goodbye", bar: 1234 }); // Saves new values to localStorage
 const { foo, bar } = get(myStoredWritable); // foo: 'goodbye', bar: 1234
 
 myStoredWritable.update((v) => ({ ...v, bar: v.bar + 1 })); // Saves new values to localStorage
@@ -80,9 +90,8 @@ If you want to use a custom TypeScript type for the storedWritable, you can pass
 your `schema` parameter must match the supplied type.
 
 ```ts
-
-import storedWritable from '@efstajas/svelte-stored-writable';
-import { z } from 'zod';
+import storedWritable from "@braden_wong_/svelte-stored-writable";
+import { z } from "zod";
 
 interface MyWritableType {
   foo: string;
@@ -95,9 +104,17 @@ const myWritableSchema = z.object({
 });
 
 // myStoredWritable is typed as Writable<MyWritableType>. `myWritableSchema` must match `MyWritableType`.
-const myStoredWritable = storedWritable<MyWritableType>('my-writable-key', myWritableSchema, { foo: 'hello', bar: 1234 });
+const myStoredWritable = storedWritable<MyWritableType>(
+  "my-writable-key",
+  myWritableSchema,
+  { foo: "hello", bar: 1234 },
+);
 ```
 
 ### Synchronizing values between tabs
 
 The storedWritable automatically uses [`storageEvent`](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) to keep changes to its localStorage key triggered from other tabs or windows synchronized.
+
+## Credits
+
+This project is a fork of [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable) by Georgios Jason Efstathiou. The original idea and implementation have been pivotal in creating this enhanced version.
