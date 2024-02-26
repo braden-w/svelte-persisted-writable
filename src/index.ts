@@ -45,7 +45,11 @@ export default function storedWritable<T>({
           return;
         }
 
-        store.set(schema.parse(JSON.parse(event.newValue)));
+        try {
+          store.set(schema.parse(JSON.parse(event.newValue)));
+        } catch {
+          store.set(initialValue);
+        }
       }
     });
   }
