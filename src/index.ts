@@ -27,7 +27,11 @@ export default function storedWritable<T>({
   initialValue: T;
   disableLocalStorage?: boolean;
 }): Writable<T> & { clear: () => void } {
-  const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
+  const valueFromStorage = !disableLocalStorage ? localStorage.getItem(key) : null;
+
+  const w = writable(
+    valueFromStorage ? schema.parse(JSON.parse(valueFromStorage)) : initialValue,
+  );
 
   // Subscribe to window storage event to keep changes from another tab in sync.
   if (!disableLocalStorage) {
@@ -42,10 +46,6 @@ export default function storedWritable<T>({
       }
     });
   }
-
-  const w = writable(
-    stored ? schema.parse(JSON.parse(stored)) : initialValue,
-  );
 
   /**
    * Set writable value and inform subscribers. Updates the writeable's stored data in
