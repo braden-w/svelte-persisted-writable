@@ -1,6 +1,11 @@
 import { writable, type Writable, get } from "svelte/store";
 import { z } from "zod";
 
+function loadFromStorage<T>(key: string, schema: z.ZodSchema<T>, defaultValue: T): T {
+  const value = localStorage.getItem(key);
+  return value ? schema.parse(JSON.parse(value)) : defaultValue;
+}
+
 /**
  * An extension of Svelte's `writable` that also saves its state to localStorage and
  * automatically restores it.
@@ -22,9 +27,7 @@ export default function storedWritable<T>({
   initialValue: T;
   disableLocalStorage?: boolean;
 }): Writable<T> & { clear: () => void } {
-  const valueFromStorage = !disableLocalStorage ? localStorage.getItem(key) : null;
-
-  const storeValue = valueFromStorage ? schema.parse(JSON.parse(valueFromStorage)) : initialValue;
+  const storeValue = !disableLocalStorage ? loadFromStorage(key, schema, initialValue): initialValue
   const store = writable( storeValue);
 
   // Subscribe to window storage event to keep changes from another tab in sync.
