@@ -29,20 +29,19 @@ export default function storedWritable<T>({
 }): Writable<T> & { clear: () => void } {
   const valueFromStorage = !disableLocalStorage ? localStorage.getItem(key) : null;
 
-  const w = writable(
-    valueFromStorage ? schema.parse(JSON.parse(valueFromStorage)) : initialValue,
-  );
+  const storeValue = valueFromStorage ? schema.parse(JSON.parse(valueFromStorage)) : initialValue;
+  const store = writable( storeValue);
 
   // Subscribe to window storage event to keep changes from another tab in sync.
   if (!disableLocalStorage) {
     window?.addEventListener("storage", (event) => {
       if (event.key === key) {
         if (event.newValue === null) {
-          w.set(initialValue);
+          store.set(initialValue);
           return;
         }
 
-        w.set(schema.parse(JSON.parse(event.newValue)));
+        store.set(schema.parse(JSON.parse(event.newValue)));
       }
     });
   }
@@ -51,30 +50,30 @@ export default function storedWritable<T>({
    * Set writable value and inform subscribers. Updates the writeable's stored data in
    * localstorage.
    * */
-  function set(...args: Parameters<typeof w.set>) {
-    w.set(...args);
-    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(w)));
+  function set(...args: Parameters<typeof store.set>) {
+    store.set(...args);
+    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(store)));
   }
 
   /**
    * Update writable value using a callback and inform subscribers. Updates the writeable's
    * stored data in localstorage.
    * */
-  function update(...args: Parameters<typeof w.update>) {
-    w.update(...args);
-    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(w)));
+  function update(...args: Parameters<typeof store.update>) {
+    store.update(...args);
+    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(store)));
   }
 
   /**
    * Delete any data saved for this StoredWritable in localstorage.
    */
   function clear() {
-    w.set(initialValue);
+    store.set(initialValue);
     localStorage.removeItem(key);
   }
 
   return {
-    subscribe: w.subscribe,
+    subscribe: store.subscribe,
     set,
     update,
     clear,
