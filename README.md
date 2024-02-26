@@ -2,38 +2,6 @@
 
 A drop-in extension of Svelte's `writable` that additionally stores and restores its contents using localStorage. Perfect for saving local preferences and much more. Fully type-safe.
 
-This project builds upon the solid foundation provided by [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable), introducing the following enhancements for improved usability and robustness:
-
-- **Improved Error Handling**: In the original implementation, encountering a Zod parsing error would result in an exception being thrown. This version improves upon this by gracefully reverting to the default value specified in the writable's initialization when Zod schema validation fails. This ensures your application remains resilient and prevents unexpected crashes due to localStorage data inconsistencies.
-
-- **Simplified Function Parameters**: To make the API more developer-friendly and to reduce the cognitive load when creating a new `storedWritable`, we've transitioned from using multiple parameters to a single, destructured object. This change not only enhances readability but also makes the function's usage more intuitive. Here's a quick comparison to illustrate the update:
-
-**Before:**
-
-```ts
-const myStoredWritable = storedWritable(
-  "my-writable-key",
-  myWritableSchema,
-  { foo: "hello", bar: 1234 },
-  true,
-);
-```
-
-**After:**
-
-```ts
-const myStoredWritable = storedWritable({
-  key: "my-writable-key",
-  schema: myWritableSchema,
-  initialValue: { foo: "hello", bar: 1234 },
-  skipLocalStorage: true,
-});
-```
-
-By encapsulating the parameters within a single object, we offer a cleaner and more manageable interface for developers, streamlining the creation and configuration of `storedWritable` instances.
-
-These modifications aim to enhance the developer experience by providing better error management and a more accessible API, all while maintaining the original package's full type safety and local storage integration capabilities.
-
 ## ⬇️ Installation
 
 Install with a package manager of your choice. We're also installing `zod` to be able to define the writable's schema (more on this below).
@@ -153,6 +121,36 @@ const myStoredWritable = storedWritable<MyWritableType>({
 
 The storedWritable automatically uses [`storageEvent`](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) to keep changes to its localStorage key triggered from other tabs or windows synchronized.
 
-## Credits
+## Credits and Updates
 
-This project is a fork of [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable) by Georgios Jason Efstathiou. The original idea and implementation have been pivotal in creating this enhanced version.
+This project builds upon the solid foundation provided by [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable), introducing the following enhancements for improved usability and robustness:
+
+- **Improved Error Handling**: In the original implementation, encountering a Zod parsing error would result in an exception being thrown. This version improves upon this by gracefully reverting to the default value specified in the writable's initialization when Zod schema validation fails. This ensures your application remains resilient and prevents unexpected crashes due to localStorage data inconsistencies.
+
+- **Simplified Function Parameters**: To make the API more developer-friendly and to reduce the cognitive load when creating a new `storedWritable`, we've transitioned from using multiple parameters to a single, destructured object. This change not only enhances readability but also makes the function's usage more intuitive. Here's a quick comparison to illustrate the update:
+
+**Before:**
+
+```ts
+const myStoredWritable = storedWritable(
+  "my-writable-key",
+  myWritableSchema,
+  { foo: "hello", bar: 1234 },
+  true,
+);
+```
+
+**After:**
+
+```ts
+const myStoredWritable = storedWritable({
+  key: "my-writable-key",
+  schema: myWritableSchema,
+  initialValue: { foo: "hello", bar: 1234 },
+  skipLocalStorage: true,
+});
+```
+
+By encapsulating the parameters within a single object, we offer a cleaner and more manageable interface for developers, streamlining the creation and configuration of `storedWritable` instances.
+
+These modifications aim to enhance the developer experience by providing better error management and a more accessible API, all while maintaining the original package's full type safety and local storage integration capabilities.
