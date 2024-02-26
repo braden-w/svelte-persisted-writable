@@ -20,12 +20,17 @@ type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
 export default function storedWritable<
   S extends z.infer<T>,
   T extends z.ZodType = z.ZodType<S>
->(
-  key: string,
-  schema: T,
-  initialValue: z.infer<typeof schema>,
-  disableLocalStorage = false
-): Writable<
+>({
+  key,
+  schema,
+  initialValue,
+  disableLocalStorage = false,
+}: {
+  key: string;
+  schema: T;
+  initialValue: z.infer<typeof schema>;
+  disableLocalStorage?: boolean;
+}): Writable<
   Equals<T, typeof schema> extends true ? S : z.infer<typeof schema>
 > & { clear: () => void } {
   const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
