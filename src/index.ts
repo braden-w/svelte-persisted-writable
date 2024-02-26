@@ -1,11 +1,10 @@
 import { writable, type Writable, get } from "svelte/store";
 import { z } from "zod";
 
-type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
-  ? 1
-  : 2
-  ? true
-  : false;
+type Equals<X, Y> =
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
+    ? true
+    : false;
 
 /**
  * An extension of Svelte's `writable` that also saves its state to localStorage and
@@ -17,22 +16,17 @@ type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
  * @param disableLocalStorage Skip interaction with localStorage, for example during SSR.
  * @returns A stored writable.
  */
-export default function storedWritable<
-  S extends z.infer<T>,
-  T extends z.ZodType = z.ZodType<S>
->({
+export default function storedWritable<T>({
   key,
   schema,
   initialValue,
   disableLocalStorage = false,
 }: {
   key: string;
-  schema: T;
-  initialValue: z.infer<typeof schema>;
+  schema: z.ZodSchema<T>;
+  initialValue: T;
   disableLocalStorage?: boolean;
-}): Writable<
-  Equals<T, typeof schema> extends true ? S : z.infer<typeof schema>
-> & { clear: () => void } {
+}): Writable<T> & { clear: () => void } {
   const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
 
   // Subscribe to window storage event to keep changes from another tab in sync.
@@ -49,8 +43,8 @@ export default function storedWritable<
     });
   }
 
-  const w = writable<S>(
-    stored ? schema.parse(JSON.parse(stored)) : initialValue
+  const w = writable(
+    stored ? schema.parse(JSON.parse(stored)) : initialValue,
   );
 
   /**
