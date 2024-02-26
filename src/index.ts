@@ -1,13 +1,21 @@
 import { writable, type Writable, get } from "svelte/store";
 import { z } from "zod";
 
-function loadFromStorage<T>({ key, schema, defaultValue }: { key: string; schema: z.ZodSchema<T>; defaultValue: T; }): T {
+function loadFromStorage<T>({
+  key,
+  schema,
+  defaultValue,
+}: {
+  key: string;
+  schema: z.ZodSchema<T>;
+  defaultValue: T;
+}): T {
   const value = localStorage.getItem(key);
   if (!value) return defaultValue;
   try {
     const parsed = JSON.parse(value);
     return schema.parse(parsed);
-  } catch  {
+  } catch {
     return defaultValue;
   }
 }
@@ -33,8 +41,10 @@ export default function storedWritable<T>({
   initialValue: T;
   disableLocalStorage?: boolean;
 }): Writable<T> & { clear: () => void } {
-  const storeValue = !disableLocalStorage ? loadFromStorage({ key, schema, defaultValue: initialValue }): initialValue
-  const store = writable( storeValue);
+  const storeValue = !disableLocalStorage
+    ? loadFromStorage({ key, schema, defaultValue: initialValue })
+    : initialValue;
+  const store = writable(storeValue);
 
   // Subscribe to window storage event to keep changes from another tab in sync.
   if (!disableLocalStorage) {
@@ -60,7 +70,8 @@ export default function storedWritable<T>({
    * */
   function set(...args: Parameters<typeof store.set>) {
     store.set(...args);
-    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(store)));
+    if (!disableLocalStorage)
+      localStorage.setItem(key, JSON.stringify(get(store)));
   }
 
   /**
@@ -69,7 +80,8 @@ export default function storedWritable<T>({
    * */
   function update(...args: Parameters<typeof store.update>) {
     store.update(...args);
-    if (!disableLocalStorage) localStorage.setItem(key, JSON.stringify(get(store)));
+    if (!disableLocalStorage)
+      localStorage.setItem(key, JSON.stringify(get(store)));
   }
 
   /**
