@@ -1,11 +1,6 @@
 import { writable, type Writable, get } from "svelte/store";
 import { z } from "zod";
 
-type Equals<X, Y> =
-  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
-    ? true
-    : false;
-
 /**
  * An extension of Svelte's `writable` that also saves its state to localStorage and
  * automatically restores it.
