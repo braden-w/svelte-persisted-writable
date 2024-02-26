@@ -1,10 +1,11 @@
 {
-  "name": "@efstajas/svelte-stored-writable",
-  "version": "0.2.0",
+  "name": "@braden_wong_/svelte-stored-writable",
+  "version": "0.3.0",
   "type": "module",
-  "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically.",
+  "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically. Fork of @efstajas/svelte-stored-writable with a slightly different API.",
   "keywords": [
     "svelte",
+    "stores",
     "localStorage",
     "writable",
     "preferences"
@@ -12,13 +13,13 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/efstajas/svelte-stored-writable.git"
+    "url": "https://github.com/braden_wong_/svelte-stored-writable.git"
   },
   "scripts": {
     "clean": "rm -rf lib/*",
     "build": "tsc"
   },
-  "author": "Georgios Jason Efstathiou",
+  "author": "Braden Wong (fork), Georgios Jason Efstathiou (original)",
   "license": "Apache-2.0",
   "dependencies": {
     "svelte": "^3.57.0",
