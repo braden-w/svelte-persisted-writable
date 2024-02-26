@@ -3,7 +3,13 @@ import { z } from "zod";
 
 function loadFromStorage<T>(key: string, schema: z.ZodSchema<T>, defaultValue: T): T {
   const value = localStorage.getItem(key);
-  return value ? schema.parse(JSON.parse(value)) : defaultValue;
+  if (!value) return defaultValue;
+  try {
+    const parsed = JSON.parse(value);
+    return schema.parse(parsed);
+  } catch  {
+    return defaultValue;
+  }
 }
 
 /**
