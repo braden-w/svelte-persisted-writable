@@ -5,9 +5,13 @@
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically. Fork of @efstajas/svelte-stored-writable with better error handling and parameters as destructured object",
   "keywords": [
     "svelte",
+    "store",
     "stores",
+    "synced",
+    "local storage",
     "localStorage",
     "writable",
+    "persistent",
     "preferences"
   ],
   "main": "lib/index.js",
