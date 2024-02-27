@@ -37,7 +37,7 @@ const myWritableSchema = z.object({
   bar: z.number(),
 });
 
-const myStoredWritable = persistedWritable({
+const myPersistedWritable = persistedWritable({
   key: "my-writable-key",
   schema: myWritableSchema,
   initialValue: {
@@ -49,7 +49,7 @@ const myStoredWritable = persistedWritable({
 
 #### `key`
 
-Defines the localStorage `key` that this writable should use. Usually, you want to keep this unique between storedWritables (and other mechanisms writing to localStorage in your application) to avoid interference.
+Defines the localStorage `key` that this writable should use. Usually, you want to keep this unique between persistedWritables (and other mechanisms writing to localStorage in your application) to avoid interference.
 
 #### `schema`
 
@@ -71,18 +71,18 @@ You can interact with a `persistedWritable` in the exact same way as a normal `w
 Additionally, you can call `persistedWritable.clear` to delete any saved data in localStorage, and reset it back to `initialValues`.
 
 ```ts
-// Assuming myStoredWritable is already created as shown above
+// Assuming myPersistedWritable is already created as shown above
 
-const { foo, bar } = get(myStoredWritable); // foo: 'hello', bar: 1234
+const { foo, bar } = get(myPersistedWritable); // foo: 'hello', bar: 1234
 
-myStoredWritable.set({ foo: "goodbye", bar: 1234 }); // Saves new values to localStorage
-const { foo, bar } = get(myStoredWritable); // foo: 'goodbye', bar: 1234
+myPersistedWritable.set({ foo: "goodbye", bar: 1234 }); // Saves new values to localStorage
+const { foo, bar } = get(myPersistedWritable); // foo: 'goodbye', bar: 1234
 
-myStoredWritable.update((v) => ({ ...v, bar: v.bar + 1 })); // Saves new values to localStorage
-const { foo, bar } = get(myStoredWritable); // foo: 'goodbye', bar: 1235
+myPersistedWritable.update((v) => ({ ...v, bar: v.bar + 1 })); // Saves new values to localStorage
+const { foo, bar } = get(myPersistedWritable); // foo: 'goodbye', bar: 1235
 
-myStoredWritable.clear(); // Deletes any saved data in localStorage
-const { foo, bar } = get(myStoredWritable); // foo: 'hello', bar: 1234
+myPersistedWritable.clear(); // Deletes any saved data in localStorage
+const { foo, bar } = get(myPersistedWritable); // foo: 'hello', bar: 1234
 ```
 
 Within a Svelte component, you can also use the usual `$writable` syntax to conveniently subscribe to changes of a `persistedWritable`.
@@ -106,8 +106,8 @@ const myWritableSchema = z.object({
   bar: z.number(),
 });
 
-// myStoredWritable is typed as Writable<MyWritableType>. `myWritableSchema` must match `MyWritableType`.
-const myStoredWritable = persistedWritable<MyWritableType>({
+// myPersistedWritable is typed as Writable<MyWritableType>. `myWritableSchema` must match `MyWritableType`.
+const myPersistedWritable = persistedWritable<MyWritableType>({
   key: "my-writable-key",
   schema: myWritableSchema,
   initialValue: {
@@ -132,7 +132,7 @@ This project builds upon the solid foundation provided by [@efstajas/svelte-stor
 **Before:**
 
 ```ts
-const myStoredWritable = persistedWritable(
+const myPersistedWritable = persistedWritable(
   "my-writable-key",
   myWritableSchema,
   { foo: "hello", bar: 1234 },
@@ -143,7 +143,7 @@ const myStoredWritable = persistedWritable(
 **After:**
 
 ```ts
-const myStoredWritable = persistedWritable({
+const myPersistedWritable = persistedWritable({
   key: "my-writable-key",
   schema: myWritableSchema,
   initialValue: { foo: "hello", bar: 1234 },

@@ -51,7 +51,7 @@ export default function persistedWritable<T>({
   }
 
   /**
-   * Delete any data saved for this StoredWritable in localstorage.
+   * Delete any data saved for this PersistedWritable in localstorage.
    */
   function clear() {
     store.set(initialValue);
