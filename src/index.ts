@@ -2,60 +2,6 @@ import { onDestroy } from "svelte";
 import { get, writable, type Writable } from "svelte/store";
 import { z } from "zod";
 
-function loadFromStorage<T>({
-  key,
-  schema,
-  defaultValue,
-}: {
-  key: string;
-  schema: z.ZodSchema<T>;
-  defaultValue: T;
-}): T {
-  try {
-    const item = localStorage.getItem(key);
-    return item ? schema.parse(JSON.parse(item)) : defaultValue;
-  } catch {
-    return defaultValue;
-  }
-}
-
-function saveToStorage<T>({ key, value }: { key: string; value: T }) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-
-function removeFromStorage(key: string) {
-  localStorage.removeItem(key);
-}
-
-function createStorageEventListener<T>({
-  key,
-  schema,
-  store,
-  initialValue,
-}: {
-  key: string;
-  schema: z.ZodSchema<T>;
-  store: Writable<T>;
-  initialValue: T;
-}) {
-  const handleStorageEvent = (event: StorageEvent) => {
-    if (event.key === key) {
-      try {
-        const newValue = event.newValue
-          ? JSON.parse(event.newValue)
-          : initialValue;
-        const validValue = schema.parse(newValue);
-        store.set(validValue);
-      } catch {
-        store.set(initialValue);
-      }
-    }
-  };
-
-  window.addEventListener("storage", handleStorageEvent);
-  onDestroy(() => window.removeEventListener("storage", handleStorageEvent));
-}
-
 /**
  * An extension of Svelte's `writable` that also saves its state to localStorage and
  * automatically restores it.
@@ -119,3 +65,58 @@ export default function storedWritable<T>({
     clear,
   };
 }
+
+function loadFromStorage<T>({
+  key,
+  schema,
+  defaultValue,
+}: {
+  key: string;
+  schema: z.ZodSchema<T>;
+  defaultValue: T;
+}): T {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? schema.parse(JSON.parse(item)) : defaultValue;
+  } catch {
+    return defaultValue;
+  }
+}
+
+function saveToStorage<T>({ key, value }: { key: string; value: T }) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function removeFromStorage(key: string) {
+  localStorage.removeItem(key);
+}
+
+function createStorageEventListener<T>({
+  key,
+  schema,
+  store,
+  initialValue,
+}: {
+  key: string;
+  schema: z.ZodSchema<T>;
+  store: Writable<T>;
+  initialValue: T;
+}) {
+  const handleStorageEvent = (event: StorageEvent) => {
+    if (event.key === key) {
+      try {
+        const newValue = event.newValue
+          ? JSON.parse(event.newValue)
+          : initialValue;
+        const validValue = schema.parse(newValue);
+        store.set(validValue);
+      } catch {
+        store.set(initialValue);
+      }
+    }
+  };
+
+  window.addEventListener("storage", handleStorageEvent);
+  onDestroy(() => window.removeEventListener("storage", handleStorageEvent));
+}
+
