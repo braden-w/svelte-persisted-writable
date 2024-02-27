@@ -138,7 +138,7 @@ const myPersistedWritable = persistedWritable(
   "my-writable-key",
   myWritableSchema,
   { foo: "hello", bar: 1234 },
-  true,
+  true
 );
 ```
 
