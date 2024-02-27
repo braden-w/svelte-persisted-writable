@@ -1,5 +1,11 @@
 # svelte-persisted-writable
 
+## 1.0.1
+
+### Patch Changes
+
+- Fixed package entry point to point properly to index.js
+
 ## 1.0.0
 
 ### Major Changes
