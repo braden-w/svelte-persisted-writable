@@ -1,4 +1,3 @@
-import { onDestroy } from "svelte";
 import { get, writable, type Writable } from "svelte/store";
 import { z } from "zod";
 
@@ -117,6 +116,5 @@ function createStorageEventListener<T>({
   };
 
   window.addEventListener("storage", handleStorageEvent);
-  onDestroy(() => window.removeEventListener("storage", handleStorageEvent));
 }
 
