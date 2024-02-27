@@ -117,4 +117,3 @@ function createStorageEventListener<T>({
 
   window.addEventListener("storage", handleStorageEvent);
 }
-

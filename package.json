@@ -14,18 +14,21 @@
     "persistent",
     "preferences"
   ],
-  "main": "lib/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/braden-w/svelte-persisted-writable.git"
   },
   "scripts": {
-    "clean": "rm -rf lib/*",
-    "build": "tsc"
+    "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "author": "Braden Wong (fork), Georgios Jason Efstathiou (original)",
   "license": "Apache-2.0",
   "dependencies": {
+    "@changesets/cli": "^2.27.1",
+    "tsup": "^8.0.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
