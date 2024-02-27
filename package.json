@@ -19,7 +19,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/braden-w/svelte-persisted-writable.git"
+    "url": "git+https://github.com/braden-w/svelte-persisted-writable.git"
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts"
