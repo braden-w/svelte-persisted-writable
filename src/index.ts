@@ -12,7 +12,7 @@ import { z } from "zod";
  * @param disableLocalStorage Skip interaction with localStorage, for example during SSR.
  * @returns A stored writable.
  */
-export default function storedWritable<T>({
+export default function persistedWritable<T>({
   key,
   schema,
   initialValue,
