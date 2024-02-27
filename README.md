@@ -1,4 +1,4 @@
-# 💾 Svelte Synced Store
+# 💾 Svelte Persisted Writable
 
 A drop-in extension of Svelte's `writable` that additionally stores and restores its contents using localStorage. Perfect for saving local preferences and much more. Fully type-safe.
 
@@ -7,19 +7,19 @@ A drop-in extension of Svelte's `writable` that additionally stores and restores
 Install with a package manager of your choice. We're also installing `zod` to be able to define the writable's schema (more on this below).
 
 ```bash
-npm install svelte-synced-store zod
+npm install svelte-persisted-writable zod
 
 # OR
 
-yarn add svelte-synced-store zod
+yarn add svelte-persisted-writable zod
 
 # OR
 
-pnpm add svelte-synced-store zod
+pnpm add svelte-persisted-writable zod
 
 # OR
 
-bun add svelte-synced-store zod
+bun add svelte-persisted-writable zod
 ```
 
 ## 🤓 Usage
@@ -29,7 +29,7 @@ bun add svelte-synced-store zod
 To generate a new persistedWritable, call it with a single object parameter that includes `key`, `schema` and `initialValue`:
 
 ```ts
-import persistedWritable from "svelte-synced-store";
+import persistedWritable from "svelte-persisted-writable";
 import { z } from "zod";
 
 const myWritableSchema = z.object({
@@ -93,7 +93,7 @@ If you want to use a custom TypeScript type for the persistedWritable, you can p
 your `schema` parameter must match the supplied type.
 
 ```ts
-import persistedWritable from "svelte-synced-store";
+import persistedWritable from "svelte-persisted-writable";
 import { z } from "zod";
 
 interface MyWritableType {
