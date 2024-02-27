@@ -1,4 +1,5 @@
-import { writable, type Writable, get } from "svelte/store";
+import { onDestroy } from "svelte";
+import { get, writable, type Writable } from "svelte/store";
 import { z } from "zod";
 
 function loadFromStorage<T>({
@@ -10,14 +11,49 @@ function loadFromStorage<T>({
   schema: z.ZodSchema<T>;
   defaultValue: T;
 }): T {
-  const value = localStorage.getItem(key);
-  if (!value) return defaultValue;
   try {
-    const parsed = JSON.parse(value);
-    return schema.parse(parsed);
+    const item = localStorage.getItem(key);
+    return item ? schema.parse(JSON.parse(item)) : defaultValue;
   } catch {
     return defaultValue;
   }
+}
+
+function saveToStorage<T>({ key, value }: { key: string; value: T }) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function removeFromStorage(key: string) {
+  localStorage.removeItem(key);
+}
+
+function createStorageEventListener<T>({
+  key,
+  schema,
+  store,
+  initialValue,
+}: {
+  key: string;
+  schema: z.ZodSchema<T>;
+  store: Writable<T>;
+  initialValue: T;
+}) {
+  const handleStorageEvent = (event: StorageEvent) => {
+    if (event.key === key) {
+      try {
+        const newValue = event.newValue
+          ? JSON.parse(event.newValue)
+          : initialValue;
+        const validValue = schema.parse(newValue);
+        store.set(validValue);
+      } catch {
+        store.set(initialValue);
+      }
+    }
+  };
+
+  window.addEventListener("storage", handleStorageEvent);
+  onDestroy(() => window.removeEventListener("storage", handleStorageEvent));
 }
 
 /**
@@ -46,22 +82,8 @@ export default function storedWritable<T>({
     : initialValue;
   const store = writable(storeValue);
 
-  // Subscribe to window storage event to keep changes from another tab in sync.
   if (!disableLocalStorage) {
-    window?.addEventListener("storage", (event) => {
-      if (event.key === key) {
-        if (event.newValue === null) {
-          store.set(initialValue);
-          return;
-        }
-
-        try {
-          store.set(schema.parse(JSON.parse(event.newValue)));
-        } catch {
-          store.set(initialValue);
-        }
-      }
-    });
+    createStorageEventListener({ key, schema, store, initialValue });
   }
 
   /**
@@ -70,8 +92,7 @@ export default function storedWritable<T>({
    * */
   function set(...args: Parameters<typeof store.set>) {
     store.set(...args);
-    if (!disableLocalStorage)
-      localStorage.setItem(key, JSON.stringify(get(store)));
+    if (!disableLocalStorage) saveToStorage({ key, value: get(store) });
   }
 
   /**
@@ -80,8 +101,7 @@ export default function storedWritable<T>({
    * */
   function update(...args: Parameters<typeof store.update>) {
     store.update(...args);
-    if (!disableLocalStorage)
-      localStorage.setItem(key, JSON.stringify(get(store)));
+    if (!disableLocalStorage) saveToStorage({ key, value: get(store) });
   }
 
   /**
@@ -89,7 +109,7 @@ export default function storedWritable<T>({
    */
   function clear() {
     store.set(initialValue);
-    localStorage.removeItem(key);
+    if (!disableLocalStorage) removeFromStorage(key);
   }
 
   return {
