@@ -1,5 +1,7 @@
 # 💾 Svelte Persisted Writable
 
+> Forked from [@efstajas/svelte-stored-writable](https://github.com/efstajas/svelte-stored-writable), this version features [proper error handling and simplified function parameters](#credits-and-updates) to enhance the developer experience.
+
 A drop-in extension of Svelte's `writable` that additionally stores and restores its contents using localStorage. Perfect for saving local preferences and much more. Fully type-safe.
 
 ## ⬇️ Installation
