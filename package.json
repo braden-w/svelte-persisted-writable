@@ -1,5 +1,5 @@
 {
-  "name": "svelte-persisted-writable",
+  "name": "@epicenterhq/svelte-persisted-writable",
   "version": "1.0.1",
   "type": "module",
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically. Fork of @efstajas/svelte-stored-writable with better error handling and parameters as destructured object",
