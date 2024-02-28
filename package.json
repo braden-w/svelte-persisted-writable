@@ -1,7 +1,6 @@
 {
   "name": "@epicenterhq/svelte-persisted-writable",
-  "version": "1.0.1",
-  "type": "module",
+  "version": "1.0.2",
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically. Fork of @efstajas/svelte-stored-writable with better error handling and parameters as destructured object",
   "keywords": [
     "svelte",
@@ -15,7 +14,7 @@
     "preferences"
   ],
   "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",

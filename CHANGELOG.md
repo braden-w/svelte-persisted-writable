@@ -1,5 +1,11 @@
 # svelte-persisted-writable
 
+## 1.0.2
+
+### Patch Changes
+
+- Fixed entry point of type module and removed type:module in package.json
+
 ## 1.0.1
 
 ### Patch Changes
