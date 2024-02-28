@@ -1,6 +1,6 @@
 {
   "name": "@epicenterhq/svelte-persisted-writable",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically. Fork of @efstajas/svelte-stored-writable with better error handling and parameters as destructured object",
   "keywords": [
     "svelte",
@@ -21,7 +21,8 @@
     "url": "git+https://github.com/braden-w/svelte-persisted-writable.git"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "npm run build -- --watch"
   },
   "author": "Braden Wong (fork), Georgios Jason Efstathiou (original)",
   "license": "Apache-2.0",

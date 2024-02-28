@@ -1,5 +1,11 @@
 # svelte-persisted-writable
 
+## 1.0.4
+
+### Patch Changes
+
+- Update build scripts and tsconfig for entry points.
+
 ## 1.0.2
 
 ### Patch Changes
